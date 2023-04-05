@@ -11,13 +11,6 @@ fn main() {
 
 #[cfg(not(feature = "mock"))]
 fn build_rp(out_dir: &str) {
-    std::process::Command::new("git")
-        .arg("clone")
-        .arg("https://github.com/RedPitaya/RedPitaya.git")
-        .arg(out_dir)
-        .status()
-        .unwrap();
-
     let version = if cfg!(feature = "v1_04") {
         "v1.04-25"
     } else if cfg!(feature = "v1_03") {
@@ -31,9 +24,12 @@ fn build_rp(out_dir: &str) {
     };
 
     std::process::Command::new("git")
-        .current_dir(out_dir)
-        .arg("checkout")
+        .arg("clone")
+        .arg("https://github.com/RedPitaya/RedPitaya.git")
+        .arg("--branch")
         .arg(version)
+        .arg("--depth=1")
+        .arg(out_dir)
         .status()
         .unwrap();
 
